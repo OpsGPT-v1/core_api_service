@@ -17,6 +17,7 @@ jobs:
       gitops_repo: 'OpsGPT-v1/helm-repo'
       gitops_branch: 'main'
       values_file_path: 'values-prod.yaml'
+      values_dev_file_path: 'values-dev.yaml'
       yaml_image_tag_path: '.services.core-api-service.image.tag'
       acr_login_server: 'opsgpt.azurecr.io'
     secrets:
