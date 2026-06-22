@@ -1,0 +1,18 @@
+name: Production PR Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened]
+
+jobs:
+  ci:
+    uses: OpsGPT-v1/shared-workflow/.github/workflows/backend-ci.yml@main
+    with:
+      service_name: 'core-api-service'
+      python_version: '3.12'
+      working_directory: '.'
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

@@ -1,0 +1,26 @@
+name: Production Release CD
+
+on:
+  release:
+    types: [published, created]
+
+jobs:
+  deploy-prod:
+    permissions:
+      id-token: write
+      contents: read
+    uses: OpsGPT-v1/shared-workflow/.github/workflows/prod-deploy.yml@main
+    with:
+      service_name: 'core-api-service'
+      image_name: 'opsgpt/core-api-service'
+      release_tag: ${{ github.event.release.tag_name }}
+      gitops_repo: 'OpsGPT-v1/helm-repo'
+      gitops_branch: 'main'
+      values_file_path: 'values-prod.yaml'
+      yaml_image_tag_path: '.services.core-api-service.image.tag'
+      acr_login_server: 'opsgpt.azurecr.io'
+    secrets:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      GITOPS_PAT: ${{ secrets.GITOPS_PAT }}
