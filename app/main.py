@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import audit_logs, auth, incidents, internal, knowledge_base, projects, users
@@ -21,13 +21,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)
-app.include_router(users.router)
-app.include_router(projects.router)
-app.include_router(incidents.router)
-app.include_router(knowledge_base.router)
-app.include_router(audit_logs.router)
-app.include_router(internal.router)
+api_router = APIRouter()
+api_router.include_router(auth.router)
+api_router.include_router(users.router)
+api_router.include_router(projects.router)
+api_router.include_router(incidents.router)
+api_router.include_router(knowledge_base.router)
+api_router.include_router(audit_logs.router)
+api_router.include_router(internal.router)
+
+app.include_router(api_router)
+app.include_router(api_router, prefix="/api/core")
 
 
 @app.on_event("startup")
